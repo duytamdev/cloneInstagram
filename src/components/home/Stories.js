@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     borderColor: '#ff8501',
   },
   container: {
-    marginTop: 13,
+    marginVertical: 13,
   },
 });
 export default Stories;

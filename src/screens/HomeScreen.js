@@ -1,15 +1,22 @@
 import React from 'react';
-import {Text, View, StyleSheet, SafeAreaView} from 'react-native';
+import {Text, View, ScrollView, StyleSheet, SafeAreaView} from 'react-native';
 import {StatusBar} from 'expo-status-bar';
 
 import Header from '../components/home/Header';
 import Stories from '../components/home/Stories';
-
+import Post from '../components/home/Post';
+import {POSTS} from '../../assets/data/post';
 const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
       <Stories />
+      <ScrollView>
+        {POSTS.map((post, index) => {
+          return <Post key={index} post={post} />;
+        })}
+      </ScrollView>
+
       <StatusBar style={'light'} />
     </SafeAreaView>
   );

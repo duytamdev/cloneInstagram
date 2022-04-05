@@ -3,11 +3,13 @@ import {Text, View, StyleSheet, SafeAreaView} from 'react-native';
 import {StatusBar} from 'expo-status-bar';
 
 import Header from '../components/home/Header';
+import Stories from '../components/home/Stories';
 
 const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
+      <Stories />
       <StatusBar style={'light'} />
     </SafeAreaView>
   );

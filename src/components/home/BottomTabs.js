@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
-const MyDivider = () => {
+export const MyDivider = () => {
   return <View style={{height: 0.6, backgroundColor: 'white'}} />;
 };
 const BottomTabs = () => {

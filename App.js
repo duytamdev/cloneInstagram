@@ -1,8 +1,5 @@
-import {StatusBar} from 'expo-status-bar';
-import {StyleSheet, View} from 'react-native';
-import HomeScreen from './src/screens/HomeScreen';
-import NewPostScreen from './src/screens/NewPostScreen';
+import SignedInStack from './src/naigations';
 
 export default function App() {
-  return <NewPostScreen />;
+  return <SignedInStack />;
 }

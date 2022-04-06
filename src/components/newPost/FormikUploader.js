@@ -3,6 +3,8 @@ import {Text, Image, View, TextInput, StyleSheet, Button} from 'react-native';
 import * as Yup from 'yup';
 import {Formik} from 'formik';
 import {MyDivider} from '../home/BottomTabs';
+import validUrl from 'valid-url';
+import {useNavigation} from '@react-navigation/native';
 const PLACE_HOLDER_IMAGE =
   'https://media.istockphoto.com/vectors/image-place-holder-with-a-gray-camera-icon-vector-id1226328537?k=20&m=1226328537&s=170667a&w=0&h=r9__Yw9cG6dCDDEmYVob5IDOMSHSAqvlYG47RrUv-tU=';
 const uploadYupSchema = Yup.object().shape({
@@ -10,11 +12,16 @@ const uploadYupSchema = Yup.object().shape({
   captions: Yup.string().max(2200, 'Caption has reached the characters'),
 });
 const FormikUploader = () => {
+  const navigation = useNavigation();
   const [thumbnailUrl, setThumbnailUrl] = useState(PLACE_HOLDER_IMAGE);
+  const handleUploadPost = value => {
+    console.log(value);
+    navigation.goBack();
+  };
   return (
     <Formik
       initialValues={{caption: '', imageUrl: ''}}
-      onSubmit={value => console.log(value)}
+      onSubmit={value => handleUploadPost(value)}
       validationOnMount={true}
       validationSchema={uploadYupSchema}>
       {({handleBlur, handleChange, handleSubmit, values, errors, isValid}) => (
@@ -28,7 +35,11 @@ const FormikUploader = () => {
             <View>
               <Image
                 style={styles.image}
-                source={{uri: thumbnailUrl ? thumbnailUrl : PLACE_HOLDER_IMAGE}}
+                source={{
+                  uri: validUrl.isUri(thumbnailUrl)
+                    ? thumbnailUrl
+                    : PLACE_HOLDER_IMAGE,
+                }}
               />
             </View>
             <View style={{flex: 1, marginLeft: 8}}>

@@ -1,10 +1,14 @@
 import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import {MaterialIcons} from '@expo/vector-icons';
+import {useNavigation} from '@react-navigation/native';
 const Header = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <MaterialIcons name="keyboard-arrow-left" size={48} color="white" />
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+        <MaterialIcons name="keyboard-arrow-left" size={48} color="white" />
+      </TouchableOpacity>
       <Text
         style={{
           color: 'white',

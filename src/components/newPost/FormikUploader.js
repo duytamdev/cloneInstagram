@@ -8,7 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 const PLACE_HOLDER_IMAGE =
   'https://media.istockphoto.com/vectors/image-place-holder-with-a-gray-camera-icon-vector-id1226328537?k=20&m=1226328537&s=170667a&w=0&h=r9__Yw9cG6dCDDEmYVob5IDOMSHSAqvlYG47RrUv-tU=';
 const uploadYupSchema = Yup.object().shape({
-  imageUrl: Yup.string().url().required('A URL is required'),
+  imageUrl: Yup.string().url('these not URL').required('A URL is required'),
   captions: Yup.string().max(2200, 'Caption has reached the characters'),
 });
 const FormikUploader = () => {

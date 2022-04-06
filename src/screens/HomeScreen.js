@@ -6,6 +6,7 @@ import Header from '../components/home/Header';
 import Stories from '../components/home/Stories';
 import Post from '../components/home/Post';
 import {POSTS} from '../../assets/data/post';
+import BottomTabs from '../components/home/BottomTabs';
 const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
@@ -16,7 +17,7 @@ const HomeScreen = () => {
           return <Post key={index} post={post} />;
         })}
       </ScrollView>
-
+      <BottomTabs />
       <StatusBar style={'light'} />
     </SafeAreaView>
   );

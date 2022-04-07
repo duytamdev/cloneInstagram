@@ -13,23 +13,28 @@ import {Formik} from 'formik';
 import validator from 'email-validator';
 import {useNavigation} from '@react-navigation/native';
 
-const loginYupSchema = Yup.object().shape({
+const registerYupSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email format').required('Required!'),
   password: Yup.string().min(8, 'Minimum 8 characters').required('Required!'),
+  confirmPassword: Yup.string()
+    .min(8, 'Minimum 8 characters')
+    .oneOf([Yup.ref('password'), null], 'Passwords must match')
+    .required('Required!'),
 });
-const LoginForm = () => {
+const RegisterForm = () => {
   const navigation = useNavigation();
-  const handleLogin = value => {
-    navigation.navigate('HomeScreen');
+  const handleRegister = value => {
+    navigation.navigate('LoginScreen');
   };
   return (
     <Formik
       initialValues={{
         email: '',
         password: '',
+        confirmPassword: '',
       }}
-      onSubmit={value => handleLogin(value)}
-      validationSchema={loginYupSchema}>
+      onSubmit={value => handleRegister(value)}
+      validationSchema={registerYupSchema}>
       {({handleBlur, handleChange, handleSubmit, values, errors, isValid}) => (
         <View style={styles.container}>
           <View style={styles.inputContainer}>
@@ -80,18 +85,43 @@ const LoginForm = () => {
               <Text style={styles.textError}>{errors.password}</Text>
             )}
           </View>
-          <View style={{alignSelf: 'flex-end', marginBottom: 20}}>
-            <Text style={{color: '#395aff'}}>Forgot password?</Text>
+          <View style={styles.inputContainer}>
+            <View
+              style={[
+                styles.inputField,
+                {
+                  borderColor:
+                    values.confirmPassword.length < 8 ||
+                    values.password !== values.confirmPassword
+                      ? '#ec2222'
+                      : '#fafafa',
+                },
+              ]}>
+              <TextInput
+                style={{color: 'white', fontSize: 16}}
+                placeholderTextColor="gray"
+                placeholder={'Cornfirm password'}
+                value={values.confirmPassword}
+                onChangeText={handleChange('confirmPassword')}
+              />
+            </View>
+            {errors.confirmPassword && (
+              <Text style={styles.textError}>{errors.confirmPassword}</Text>
+            )}
           </View>
-          <Button title={'Login'} onPress={handleSubmit} />
+          <Button
+            disabled={!isValid}
+            title={'Register'}
+            onPress={handleRegister}
+          />
           <View
             style={{flexDirection: 'row', alignSelf: 'center', marginTop: 30}}>
-            <Text style={{color: 'white'}}>Don't have an account?</Text>
+            <Text style={{color: 'white'}}>You have an account?</Text>
             <TouchableOpacity
-              onPress={() => navigation.navigate('RegisterScreen')}>
+              onPress={() => navigation.navigate('LoginScreen')}>
               <Text style={{color: '#395aff', fontWeight: '600'}}>
                 {'  '}
-                Register!
+                Login!
               </Text>
             </TouchableOpacity>
           </View>
@@ -121,4 +151,4 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
   },
 });
-export default LoginForm;
+export default RegisterForm;

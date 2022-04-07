@@ -12,8 +12,13 @@ import * as Yup from 'yup';
 import {Formik} from 'formik';
 import validator from 'email-validator';
 import {useNavigation} from '@react-navigation/native';
+import MyInput from '../common/MyInput';
 
 const registerYupSchema = Yup.object().shape({
+  username: Yup.string()
+    .min(4, 'Minimum 4 characters')
+    .max(20, 'Maximum 20 characters')
+    .required('Required'),
   email: Yup.string().email('Invalid email format').required('Required!'),
   password: Yup.string().min(8, 'Minimum 8 characters').required('Required!'),
   confirmPassword: Yup.string()
@@ -23,96 +28,86 @@ const registerYupSchema = Yup.object().shape({
 });
 const RegisterForm = () => {
   const navigation = useNavigation();
-  const handleRegister = value => {
+  const handleRegister = values => {
+    console.log(values);
     navigation.navigate('LoginScreen');
   };
   return (
     <Formik
       initialValues={{
         email: '',
+        username: '',
         password: '',
         confirmPassword: '',
       }}
-      onSubmit={value => handleRegister(value)}
+      onSubmit={values => handleRegister(values)}
       validationSchema={registerYupSchema}>
       {({handleBlur, handleChange, handleSubmit, values, errors, isValid}) => (
         <View style={styles.container}>
-          <View style={styles.inputContainer}>
-            <View
-              style={[
-                styles.inputField,
-                {
-                  borderColor:
-                    values.email.length < 1 || !validator.validate(values.email)
-                      ? '#ec2222'
-                      : '#fafafa',
-                },
-              ]}>
-              <TextInput
-                autoCapitatize="none"
-                keyboardType="email-address"
-                textContentType="emailAddress"
-                style={{color: 'white', fontSize: 16}}
-                placeholderTextColor="gray"
-                placeholder={'Enter your email address'}
-                onBlur={handleBlur('email')}
-                onChangeText={handleChange('email')}
-                value={values.email}
-              />
-            </View>
-            {errors.email && (
-              <Text style={styles.textError}>{errors.email}</Text>
-            )}
-          </View>
-          <View style={styles.inputContainer}>
-            <View
-              style={[
-                styles.inputField,
-                {
-                  borderColor:
-                    values.password.length < 8 ? '#ec2222' : '#fafafa',
-                },
-              ]}>
-              <TextInput
-                style={{color: 'white', fontSize: 16}}
-                placeholderTextColor="gray"
-                placeholder={'Enter your password'}
-                value={values.password}
-                onChangeText={handleChange('password')}
-              />
-            </View>
-            {errors.password && (
-              <Text style={styles.textError}>{errors.password}</Text>
-            )}
-          </View>
-          <View style={styles.inputContainer}>
-            <View
-              style={[
-                styles.inputField,
-                {
-                  borderColor:
-                    values.confirmPassword.length < 8 ||
-                    values.password !== values.confirmPassword
-                      ? '#ec2222'
-                      : '#fafafa',
-                },
-              ]}>
-              <TextInput
-                style={{color: 'white', fontSize: 16}}
-                placeholderTextColor="gray"
-                placeholder={'Cornfirm password'}
-                value={values.confirmPassword}
-                onChangeText={handleChange('confirmPassword')}
-              />
-            </View>
-            {errors.confirmPassword && (
-              <Text style={styles.textError}>{errors.confirmPassword}</Text>
-            )}
-          </View>
+          <MyInput
+            styleInputField={{
+              borderColor:
+                values.email.length < 1 || !validator.validate(values.email)
+                  ? '#ec2222'
+                  : '#fafafa',
+            }}
+            onChangeText={handleChange('email')}
+            onBlur={handleBlur('email')}
+            errorLabel={errors.email}
+            error={errors.email}
+            placeholder={'Enter your email'}
+            value={values.email}
+            autoCapitatize="none"
+          />
+          <MyInput
+            styleInputField={{
+              borderColor:
+                values.username.length < 1 || values.username.length > 20
+                  ? '#ec2222'
+                  : '#fafafa',
+            }}
+            onChangeText={handleChange('username')}
+            onBlur={handleBlur('username')}
+            errorLabel={errors.username}
+            error={errors.username}
+            placeholder={'Enter your username'}
+            value={values.username}
+            autoCapitatize="none"
+          />
+          <MyInput
+            styleInputField={{
+              borderColor: values.password.length < 8 ? '#ec2222' : '#fafafa',
+            }}
+            onChangeText={handleChange('password')}
+            onBlur={handleBlur('password')}
+            errorLabel={errors.password}
+            error={errors.password}
+            placeholder={'Enter your password'}
+            value={values.password}
+            autoCapitatize="none"
+            secureTextEntry={true}
+          />
+          <MyInput
+            styleInputField={{
+              borderColor:
+                values.confirmPassword.length < 1 ||
+                values.password !== values.confirmPassword
+                  ? '#ec2222'
+                  : '#fafafa',
+            }}
+            onChangeText={handleChange('confirmPassword')}
+            onBlur={handleBlur('confirmPassword')}
+            errorLabel={errors.confirmPassword}
+            error={errors.confirmPassword}
+            placeholder={'Enter your confirmPassword'}
+            value={values.confirmPassword}
+            secureTextEntry={true}
+            autoCapitatize="none"
+          />
           <Button
             disabled={!isValid}
             title={'Register'}
-            onPress={handleRegister}
+            onPress={handleSubmit}
           />
           <View
             style={{flexDirection: 'row', alignSelf: 'center', marginTop: 30}}>

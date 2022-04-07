@@ -12,6 +12,7 @@ import * as Yup from 'yup';
 import {Formik} from 'formik';
 import validator from 'email-validator';
 import {useNavigation} from '@react-navigation/native';
+import MyInput from '../common/MyInput';
 
 const loginYupSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email format').required('Required!'),
@@ -32,58 +33,38 @@ const LoginForm = () => {
       validationSchema={loginYupSchema}>
       {({handleBlur, handleChange, handleSubmit, values, errors, isValid}) => (
         <View style={styles.container}>
-          <View style={styles.inputContainer}>
-            <View
-              style={[
-                styles.inputField,
-                {
-                  borderColor:
-                    values.email.length < 1 || !validator.validate(values.email)
-                      ? '#ec2222'
-                      : '#fafafa',
-                },
-              ]}>
-              <TextInput
-                autoCapitatize="none"
-                keyboardType="email-address"
-                textContentType="emailAddress"
-                style={{color: 'white', fontSize: 16}}
-                placeholderTextColor="gray"
-                placeholder={'Enter your email address'}
-                onBlur={handleBlur('email')}
-                onChangeText={handleChange('email')}
-                value={values.email}
-              />
-            </View>
-            {errors.email && (
-              <Text style={styles.textError}>{errors.email}</Text>
-            )}
-          </View>
-          <View style={styles.inputContainer}>
-            <View
-              style={[
-                styles.inputField,
-                {
-                  borderColor:
-                    values.password.length < 8 ? '#ec2222' : '#fafafa',
-                },
-              ]}>
-              <TextInput
-                style={{color: 'white', fontSize: 16}}
-                placeholderTextColor="gray"
-                placeholder={'Enter your password'}
-                value={values.password}
-                onChangeText={handleChange('password')}
-              />
-            </View>
-            {errors.password && (
-              <Text style={styles.textError}>{errors.password}</Text>
-            )}
-          </View>
+          <MyInput
+            styleInputField={{
+              borderColor:
+                values.email.length < 1 || !validator.validate(values.email)
+                  ? '#ec2222'
+                  : '#fafafa',
+            }}
+            onChangeText={handleChange('email')}
+            onBlur={handleBlur('email')}
+            errorLabel={errors.email}
+            error={errors.email}
+            placeholder={'Enter your email'}
+            value={values.email}
+            autoCapitatize="none"
+          />
+          <MyInput
+            styleInputField={{
+              borderColor: values.password.length < 8 ? '#ec2222' : '#fafafa',
+            }}
+            onChangeText={handleChange('password')}
+            onBlur={handleBlur('password')}
+            errorLabel={errors.password}
+            error={errors.password}
+            placeholder={'Enter your password'}
+            value={values.password}
+            autoCapitatize="none"
+            secureTextEntry={true}
+          />
           <View style={{alignSelf: 'flex-end', marginBottom: 20}}>
             <Text style={{color: '#395aff'}}>Forgot password?</Text>
           </View>
-          <Button title={'Login'} onPress={handleSubmit} />
+          <Button disabled={!isValid} title={'Login'} onPress={handleSubmit} />
           <View
             style={{flexDirection: 'row', alignSelf: 'center', marginTop: 30}}>
             <Text style={{color: 'white'}}>Don't have an account?</Text>

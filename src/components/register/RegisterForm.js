@@ -1,19 +1,20 @@
 import React from 'react';
 import {
   Text,
-  Image,
   View,
-  TextInput,
   StyleSheet,
   Button,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import * as Yup from 'yup';
 import {Formik} from 'formik';
 import validator from 'email-validator';
 import {useNavigation} from '@react-navigation/native';
 import MyInput from '../common/MyInput';
-
+import {auth, db} from '../../config/firebase';
+import {createUserWithEmailAndPassword} from 'firebase/auth';
+import {collection, addDoc} from 'firebase/firestore';
 const registerYupSchema = Yup.object().shape({
   username: Yup.string()
     .min(4, 'Minimum 4 characters')
@@ -29,8 +30,31 @@ const registerYupSchema = Yup.object().shape({
 const RegisterForm = () => {
   const navigation = useNavigation();
   const handleRegister = values => {
-    console.log(values);
-    navigation.navigate('LoginScreen');
+    onRegister(values.email, values.password, values.username).then();
+  };
+  const getRandomProfilePicture = async () => {
+    const response = await fetch('https://randomuser.me/api');
+    const data = await response.json();
+    return data.results[0].picture.large;
+  };
+  const onRegister = async (email, password, username) => {
+    try {
+      const authUser = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      // in database
+      await addDoc(collection(db, 'users'), {
+        owner_uid: authUser.user.uid,
+        username: username,
+        email: authUser.user.email,
+        profile_picture: await getRandomProfilePicture(),
+      });
+      navigation.navigate('LoginScreen');
+    } catch (e) {
+      Alert.alert('⚠️ Oh!', e.message);
+    }
   };
   return (
     <Formik

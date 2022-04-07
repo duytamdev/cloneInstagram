@@ -1,8 +1,7 @@
 import React from 'react';
-import {Text, View, StyleSheet, Image} from 'react-native';
+import {View, StyleSheet, Image} from 'react-native';
 import {StatusBar} from 'expo-status-bar';
 import LoginForm from '../components/login/LoginForm';
-
 const LoginScreen = () => {
   return (
     <View style={styles.container}>

@@ -1,9 +1,8 @@
 import React from 'react';
 import {
   Text,
-  Image,
+  Alert,
   View,
-  TextInput,
   StyleSheet,
   Button,
   TouchableOpacity,
@@ -13,6 +12,8 @@ import {Formik} from 'formik';
 import validator from 'email-validator';
 import {useNavigation} from '@react-navigation/native';
 import MyInput from '../common/MyInput';
+import {auth} from '../../config/firebase';
+import {signInWithEmailAndPassword} from 'firebase/auth';
 
 const loginYupSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email format').required('Required!'),
@@ -21,7 +22,30 @@ const loginYupSchema = Yup.object().shape({
 const LoginForm = () => {
   const navigation = useNavigation();
   const handleLogin = value => {
-    navigation.navigate('HomeScreen');
+    onLogin(value.email, value.password).then();
+  };
+  const onLogin = async (email, password) => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      navigation.navigate('HomeScreen');
+    } catch (e) {
+      console.log(e.message);
+      Alert.alert(
+        '⚠️My Lord...',
+        e.message + '\n\n What would you like to do next',
+        [
+          {
+            text: 'OK',
+            onPress: null,
+            style: 'cancel',
+          },
+          {
+            text: 'Sign up',
+            onPress: () => navigation.push('RegisterScreen'),
+          },
+        ],
+      );
+    }
   };
   return (
     <Formik

@@ -55,7 +55,7 @@ const PostFooter = ({post}) => {
 const Captions = ({post}) => {
   return (
     <View style={{flexDirection: 'row'}}>
-      <Text style={styles.nameText}>{post.user.toLowerCase()}</Text>
+      {/*<Text style={styles.nameText}>{post.user.toLowerCase()}</Text>*/}
       <Text style={{color: 'white', marginStart: 4}} numberOfLines={2}>
         {post.caption}
       </Text>

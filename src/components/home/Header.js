@@ -1,15 +1,23 @@
 import React from 'react';
 import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-
+import {auth} from '../../config/firebase';
+import {signOut} from 'firebase/auth';
 const Header = () => {
   const navigation = useNavigation();
   const goToCreatePost = () => {
     navigation.navigate('NewPostScreen');
   };
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleSignOut}>
         <Image
           source={require('../../../assets/images/logo.png')}
           style={styles.image}

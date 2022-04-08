@@ -1,5 +1,5 @@
-import SignedInStack from './src/naigations';
+import AuthNavigation from './src/naigations/AuthNavigation';
 
 export default function App() {
-  return <SignedInStack />;
+  return <AuthNavigation />;
 }

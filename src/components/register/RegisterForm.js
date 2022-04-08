@@ -44,7 +44,7 @@ const RegisterForm = () => {
         email,
         password,
       );
-      // in database
+      // // in database
       await addDoc(collection(db, 'users'), {
         owner_uid: authUser.user.uid,
         username: username,

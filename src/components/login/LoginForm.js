@@ -27,7 +27,6 @@ const LoginForm = () => {
   const onLogin = async (email, password) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigation.navigate('HomeScreen');
     } catch (e) {
       console.log(e.message);
       Alert.alert(

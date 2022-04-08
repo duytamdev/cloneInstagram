@@ -5,6 +5,8 @@ import {Formik} from 'formik';
 import {MyDivider} from '../home/BottomTabs';
 import validUrl from 'valid-url';
 import {useNavigation} from '@react-navigation/native';
+import {db, auth} from '../../config/firebase';
+import {collection, addDoc, serverTimestamp} from 'firebase/firestore';
 const PLACE_HOLDER_IMAGE =
   'https://media.istockphoto.com/vectors/image-place-holder-with-a-gray-camera-icon-vector-id1226328537?k=20&m=1226328537&s=170667a&w=0&h=r9__Yw9cG6dCDDEmYVob5IDOMSHSAqvlYG47RrUv-tU=';
 const uploadYupSchema = Yup.object().shape({
@@ -14,9 +16,28 @@ const uploadYupSchema = Yup.object().shape({
 const FormikUploader = () => {
   const navigation = useNavigation();
   const [thumbnailUrl, setThumbnailUrl] = useState(PLACE_HOLDER_IMAGE);
-  const handleUploadPost = value => {
-    console.log(value);
+  const handleUploadPost = async values => {
+    await uploadPostToFirebase(values.caption, values.imageUrl);
     navigation.goBack();
+  };
+  const uploadPostToFirebase = async (caption, imageUrl) => {
+    const docRef = await addDoc(
+      collection(db, 'users', auth.currentUser.email, 'posts'),
+      {
+        imageUrl: imageUrl,
+        picture: thumbnailUrl,
+        caption: caption,
+        owner_uid: auth.currentUser.uid,
+        owner_email: auth.currentUser.email,
+        createdAt: serverTimestamp(),
+        likes: [],
+        comments: [],
+        likes_by_users: [],
+        user: 'demo',
+        profile_picture: 'https://i.imgur.com/7yU9tCJ.jpg',
+      },
+    );
+    console.log(docRef);
   };
   return (
     <Formik

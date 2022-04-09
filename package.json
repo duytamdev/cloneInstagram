@@ -10,6 +10,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "react-native-progress-dialog": "^0.0.5",
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.1",
     "email-validator": "^2.0.4",

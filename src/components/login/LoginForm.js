@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   Text,
   Alert,
   View,
   StyleSheet,
   Button,
+  LogBox,
   TouchableOpacity,
 } from 'react-native';
 import * as Yup from 'yup';
@@ -14,18 +15,21 @@ import {useNavigation} from '@react-navigation/native';
 import MyInput from '../common/MyInput';
 import {auth} from '../../config/firebase';
 import {signInWithEmailAndPassword} from 'firebase/auth';
-
+import ProgressDialog from 'react-native-progress-dialog';
 const loginYupSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email format').required('Required!'),
   password: Yup.string().min(8, 'Minimum 8 characters').required('Required!'),
 });
 const LoginForm = () => {
+  LogBox.ignoreLogs(['Setting a timer']);
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = React.useState(false);
   const handleLogin = value => {
     onLogin(value.email, value.password).then();
   };
   const onLogin = async (email, password) => {
     try {
+      setIsLoading(true);
       await signInWithEmailAndPassword(auth, email, password);
     } catch (e) {
       console.log(e.message);
@@ -45,7 +49,14 @@ const LoginForm = () => {
         ],
       );
     }
+    setIsLoading(false);
   };
+  useEffect(() => {
+    return () => {
+      setIsLoading(false);
+    };
+  }, []);
+
   return (
     <Formik
       initialValues={{
@@ -56,6 +67,8 @@ const LoginForm = () => {
       validationSchema={loginYupSchema}>
       {({handleBlur, handleChange, handleSubmit, values, errors, isValid}) => (
         <View style={styles.container}>
+          <ProgressDialog visible={isLoading} />
+
           <MyInput
             styleInputField={{
               borderColor:

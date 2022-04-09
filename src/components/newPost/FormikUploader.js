@@ -30,7 +30,7 @@ const FormikUploader = () => {
         owner_uid: auth.currentUser.uid,
         owner_email: auth.currentUser.email,
         createdAt: serverTimestamp(),
-        likes: [],
+        likes: 0,
         comments: [],
         likes_by_users: [],
         user: 'demo',

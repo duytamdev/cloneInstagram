@@ -1,15 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   Text,
   View,
   StyleSheet,
   Button,
   TouchableOpacity,
+  LogBox,
   Alert,
 } from 'react-native';
 import * as Yup from 'yup';
 import {Formik} from 'formik';
 import validator from 'email-validator';
+import ProgressDialog from 'react-native-progress-dialog';
 import {useNavigation} from '@react-navigation/native';
 import MyInput from '../common/MyInput';
 import {auth, db} from '../../config/firebase';
@@ -28,7 +30,10 @@ const registerYupSchema = Yup.object().shape({
     .required('Required!'),
 });
 const RegisterForm = () => {
+  LogBox.ignoreLogs(['Setting a timer']);
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = React.useState(false);
+
   const handleRegister = values => {
     onRegister(values.email, values.password, values.username).then();
   };
@@ -39,6 +44,7 @@ const RegisterForm = () => {
   };
   const onRegister = async (email, password, username) => {
     try {
+      setIsLoading(true);
       const authUser = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -55,7 +61,14 @@ const RegisterForm = () => {
     } catch (e) {
       Alert.alert('⚠️ Oh!', e.message);
     }
+    setIsLoading(false);
   };
+  useEffect(() => {
+    return () => {
+      setIsLoading(false);
+    };
+  }, []);
+
   return (
     <Formik
       initialValues={{
@@ -68,6 +81,7 @@ const RegisterForm = () => {
       validationSchema={registerYupSchema}>
       {({handleBlur, handleChange, handleSubmit, values, errors, isValid}) => (
         <View style={styles.container}>
+          <ProgressDialog visible={isLoading} />
           <MyInput
             styleInputField={{
               borderColor:

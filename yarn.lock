@@ -5914,6 +5914,11 @@ react-native-gesture-handler@~2.1.0:
     lodash "^4.17.21"
     prop-types "^15.7.2"
 
+react-native-progress-dialog@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/react-native-progress-dialog/-/react-native-progress-dialog-0.0.5.tgz#3a6b90255fbe205fdc401d8ffdf8befc4422c6de"
+  integrity sha512-gpo+t9jF52l6rHyDoZqW1DYBL7MiUg6ROCJhTV1vql5ngb+IT4dy0ccd3sqYl8/AoC05QpFFcfh97HBBQ7RxUA==
+
 react-native-safe-area-context@3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-3.3.2.tgz#9549a2ce580f2374edb05e49d661258d1b8bcaed"

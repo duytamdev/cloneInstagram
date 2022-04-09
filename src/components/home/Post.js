@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {AntDesign} from '@expo/vector-icons';
 const PostHeader = ({post}) => {
   return (
     <View>
@@ -22,12 +23,17 @@ const PostImage = ({post}) => {
   );
 };
 const PostFooter = ({post}) => {
+  const [liked, setLiked] = useState(false);
   return (
     <View style={styles.footerContainer}>
       <View style={styles.iconsContainer}>
         <View style={styles.leftIconsContainer}>
-          <TouchableOpacity>
-            <Image source={require('../../../assets/images/hearti.png')} />
+          <TouchableOpacity onPress={() => setLiked(!liked)}>
+            <AntDesign
+              name={liked ? 'heart' : 'hearto'}
+              size={22}
+              color={liked ? '#ec2222' : '#fff'}
+            />
           </TouchableOpacity>
           <TouchableOpacity>
             <Image source={require('../../../assets/images/comment.png')} />
